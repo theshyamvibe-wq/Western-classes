@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Western Classes • Smart Learning</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #f5f9ff;
+      --card-bg: #ffffff;
+      --primary: #1a3c8f;
+      --primary-light: #2b5cc9;
+      --accent: #3b82f6;
+      --gold: #c8963e;
+      --gold-light: #e0b865;
+      --gold-pale: #fdf3dc;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --text-light: #94a3b8;
+      --border: #e8edf5;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow: 0 8px 24px rgba(26,60,143,0.08);
+      --shadow-lg: 0 16px 36px rgba(26,60,143,0.12);
+      --shadow-gold: 0 6px 20px rgba(200,150,62,0.18);
+      --radius-sm: 12px;
+      --radius: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
+      --transition: 0.25s ease;
+      --font-heading: 'Georgia', 'Times New Roman', serif;
+      --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --header-bg: #ffffff;
+      --nav-bg: #ffffff;
+      --badge-bg: #fef3c7;
+      --badge-text: #b45309;
+      --input-bg: #f8fafc;
+      --input-border: #e2e8f0;
+      --toast-bg: #1e293b;
+      --toast-text: #fff;
+      --highlight-blue: #eff6ff;
+    }
+
+    .dark-mode {
+      --bg: #0b1120;
+      --card-bg: #1e293b;
+      --primary: #4f8cf7;
+      --primary-light: #6ba0fc;
+      --accent: #60a5fa;
+      --gold: #d4a853;
+      --gold-light: #e8c97a;
+      --gold-pale: #2a2110;
+      --text: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-light: #94a3b8;
+      --border: #2d3a50;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+      --shadow: 0 8px 24px rgba(0,0,0,0.4);
+      --shadow-lg: 0 16px 36px rgba(0,0,0,0.5);
+      --shadow-gold: 0 6px 20px rgba(212,168,83,0.25);
+      --header-bg: #1a2740;
+      --nav-bg: #1a2740;
+      --badge-bg: #3d2e0a;
+      --badge-text: #fbbf24;
+      --input-bg: #1a2740;
+      --input-border: #334155;
+      --toast-bg: #e2e8f0;
+      --toast-text: #0f172a;
+      --highlight-blue: #1a3050;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(145deg, #e9f0fa 0%, #dce4f8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+      transition: background 0.4s;
+    }
+    body.dark-mode { background: linear-gradient(145deg, #0b1120 0%, #0f172a 100%); }
+
+    .app-wrapper {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg);
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      max-height: 900px;
+      position: relative;
+      transition: background 0.4s, box-shadow 0.4s;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .splash-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #0f1d3d 0%, #1a3c8f 40%, #0d1b3e 100%);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 32px;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .splash-overlay.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+    .splash-logo {
+      width: 90px; height: 90px; border-radius: 50%; background: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-weight: 900; font-size: 36px;
+      color: #1a3c8f; border: 4px solid #c8963e;
+      box-shadow: 0 0 40px rgba(200,150,62,0.5);
+      animation: splashPulse 1.8s infinite; margin-bottom: 16px;
+    }
+    @keyframes splashPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+    .splash-name { font-family: var(--font-heading); font-size:26px; font-weight:700; color:white; }
+    .splash-tagline { font-size:14px; color:rgba(255,255,255,0.85); margin-top:8px; }
+
+    .app-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px 10px; background: var(--header-bg);
+      border-bottom: 1px solid var(--border); z-index:20;
+    }
+    .header-left { display:flex; align-items:center; gap:10px; }
+    .logo-mini {
+      width:36px; height:36px; border-radius:50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display:flex; align-items:center; justify-content:center;
+      color:white; font-weight:800; font-size:16px;
+      border:2px solid var(--gold); box-shadow:0 4px 12px rgba(200,150,62,0.3);
+    }
+    .header-title { font-family: var(--font-heading); font-size:16px; font-weight:700; color:var(--text); }
+    .header-title span { color:var(--gold); }
+    .header-actions { display:flex; gap:8px; align-items:center; }
+    .icon-btn {
+      width:36px; height:36px; border-radius:50%; background:var(--card-bg);
+      border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+      cursor:pointer; color:var(--text-secondary); font-size:15px; transition: all var(--transition); position:relative;
+    }
+    .icon-btn:hover { background:var(--highlight-blue); color:var(--primary); }
+    .badge {
+      position:absolute; top:-4px; right:-4px; width:18px; height:18px;
+      background:#ef4444; color:white; border-radius:50%; font-size:10px;
+      font-weight:700; display:flex; align-items:center; justify-content:center;
+    }
+    .back-btn-header {
+      display:none; align-items:center; gap:6px; cursor:pointer;
+      color:var(--primary); font-weight:600; font-size:13px;
+      background:none; border:none; padding:6px 10px; border-radius:20px;
+    }
+    .back-btn-header.visible { display:flex; }
+
+    .screen-content { flex:1; overflow-y:auto; padding:8px 0 0; scroll-behavior:smooth; }
+    .screen { display:none; padding:12px 18px 16px; animation: fadeSlide 0.3s ease; }
+    .screen.active { display:block; }
+    @keyframes fadeSlide { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+    .bottom-nav {
+      display:flex; justify-content:space-around; align-items:center;
+      padding:10px 8px 18px; background:var(--nav-bg);
+      border-top:1px solid var(--border); z-index:20;
+    }
+    .nav-item {
+      display:flex; flex-direction:column; align-items:center; gap:2px;
+      cursor:pointer; padding:6px 10px; border-radius:12px;
+      color:var(--text-light); font-size:10px; font-weight:500;
+      background:none; border:none; transition:all var(--transition);
+    }
+    .nav-item i { font-size:20px; }
+    .nav-item.active { color:var(--primary); font-weight:700; }
+    .nav-item.active i { color:var(--primary); }
+    .nav-item.active::before { content:''; position:absolute; top:-8px; width:24px; height:3px; background:var(--gold); border-radius:0 0 4px 4px; }
+
+    .card {
+      background:var(--card-bg); border-radius:var(--radius); padding:16px;
+      box-shadow:var(--shadow-sm); border:1px solid var(--border);
+      margin-bottom:14px; transition:all var(--transition);
+    }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:12px 20px; border-radius:30px; font-weight:600; font-size:14px;
+      cursor:pointer; border:none; transition:all var(--transition); text-decoration:none;
+    }
+    .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; }
+    .btn-gold { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#1a1a1a; }
+    .btn-outline { background:transparent; border:2px solid var(--primary); color:var(--primary); }
+    .btn-sm { padding:8px 16px; font-size:12px; }
+
+    .hero-banner {
+      background:linear-gradient(135deg,#1a3c8f,#1e50c8);
+      border-radius:var(--radius-xl); padding:24px 20px; color:white; margin-bottom:16px;
+    }
+    .highlight-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .highlight-item {
+      background:var(--card-bg); border-radius:var(--radius); padding:14px 8px;
+      text-align:center; box-shadow:var(--shadow-sm); border:1px solid var(--border);
+      cursor:pointer; transition:all var(--transition);
+    }
+    .highlight-item:hover { box-shadow:var(--shadow); }
+    .subject-card {
+      display:flex; align-items:center; gap:12px; background:var(--card-bg);
+      border-radius:var(--radius); padding:14px; margin-bottom:10px;
+      border:1px solid var(--border); box-shadow:var(--shadow-sm);
+    }
+    .subject-icon {
+      width:44px; height:44px; border-radius:12px; display:flex;
+      align-items:center; justify-content:center; font-size:22px;
+    }
+    .teacher-card { text-align:center; padding:24px; }
+    .teacher-avatar {
+      width:80px; height:80px; border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),#4a6fcf);
+      display:flex; align-items:center; justify-content:center;
+      font-size:36px; color:white; margin:0 auto 14px;
+      border:3px solid var(--gold);
+    }
+    .facility-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .facility-item {
+      background:var(--card-bg); border-radius:var(--radius);
+      padding:16px 12px; text-align:center; border:1px solid var(--border);
+    }
+    .fee-highlight {
+      background:linear-gradient(135deg,#1a3c8f,#1e50c8);
+      color:white; border-radius:var(--radius-lg); padding:20px;
+      text-align:center; margin-bottom:16px;
+    }
+    .media-thumb { width:100%; aspect-ratio:16/9; border-radius:var(--radius); overflow:hidden; background:#000; margin-bottom:12px; }
+    .insta-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+    .insta-item {
+      aspect-ratio:1; border-radius:var(--radius-sm);
+      background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+      display:flex; align-items:center; justify-content:center;
+      color:white; font-size:24px; cursor:pointer; transition:all var(--transition);
+    }
+    .insta-item:hover { transform:scale(1.03); }
+    .contact-method {
+      display:flex; align-items:center; gap:14px; background:var(--card-bg);
+      padding:14px; border-radius:var(--radius); margin-bottom:10px;
+      border:1px solid var(--border); cursor:pointer;
+    }
+    .toast {
+      position:fixed; top:30px; left:50%; transform:translateX(-50%) translateY(-120px);
+      background:var(--toast-bg); color:var(--toast-text); padding:12px 22px;
+      border-radius:30px; font-weight:600; z-index:999;
+      box-shadow:0 10px 30px rgba(0,0,0,0.2); transition:transform 0.35s ease; white-space:nowrap;
+    }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    .tag { display:inline-block; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; }
+    .tag-blue { background:var(--highlight-blue); color:var(--primary); }
+    .tag-gold { background:var(--badge-bg); color:var(--badge-text); }
+    .tag-extra { background:#fee2e2; color:#b91c1c; }
+    .file-list { list-style:none; margin-top:8px; }
+    .file-list li {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:6px 8px; background:var(--highlight-blue); border-radius:8px;
+      margin-bottom:5px; font-size:12px; cursor:pointer; transition: background 0.2s;
+    }
+    .file-list li:hover { background: var(--accent); color: white; }
+    .editable-text { cursor: pointer; }
+    .editable-text:hover { background: var(--highlight-blue); border-radius: 4px; }
+    .inline-edit-input {
+      font-size: 12px; padding: 4px 8px; border-radius: 6px;
+      border: 1px solid var(--input-border); background: var(--input-bg);
+      color: var(--text); width: 100%;
+    }
+    .student-list { display: flex; flex-direction: column; gap: 8px; }
+    .student-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px; transition: all var(--transition);
+    }
+    .student-item:hover { box-shadow: var(--shadow); }
+    .student-info { flex: 1; font-size: 13px; color: var(--text); }
+    .student-info div { margin-bottom: 2px; }
+    .student-actions { display: flex; gap: 6px; }
+    .map-container {
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 200px;
+      border: 0;
+    }
+    @media (max-width: 500px) {
+      .app-wrapper { height:100vh; max-height:100vh; border-radius:0; }
+      body { padding:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper" id="appWrapper">
+    <div class="splash-overlay" id="splashOverlay">
+      <div class="splash-logo">WC</div>
+      <div class="splash-name">Western Classes</div>
+      <div class="splash-tagline">Smart Learning for Bright Future</div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="app-header">
+      <div class="header-left">
+        <div class="logo-mini">WC</div>
+        <div class="header-title">Western <span>Classes</span></div>
+      </div>
+      <div class="header-actions">
+        <button class="back-btn-header" id="backBtn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+        <button class="icon-btn" id="darkToggle" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" onclick="showToast('🔔 New homework posted!')"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+      </div>
+    </div>
+
+    <div class="screen-content" id="screenContent">
+      <!-- Home Screen (unchanged) -->
+      <div class="screen active" id="screen-home">
+        <div class="hero-banner">
+          <h2 style="font-family:var(--font-heading);">Smart Learning for Bright Future</h2>
+          <p style="opacity:0.9;">Experience smart board education with expert guidance.</p>
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-gold" onclick="navigateTo('fees')"><i class="fas fa-star"></i> Enroll Now</button>
+            <button class="btn btn-outline" style="border-color:white;color:white;" onclick="navigateTo('media')"><i class="fas fa-play-circle"></i> Watch Demo</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;margin-bottom:16px;">
+          <a href="https://youtube.com/@learnwithgulshan1435?si=bc2oBlCSPXliC-ho" target="_blank" class="btn btn-sm" style="background:white;color:#dc2626;border:1px solid #ddd;text-decoration:none;">
+            <i class="fab fa-youtube"></i> YouTube
+          </a>
+          <a href="https://www.instagram.com/learnwithgulshan?igsh=MTV4a2ZwbHdhOG90bA==" target="_blank" class="btn btn-sm" style="background:white;color:#c026d3;border:1px solid #ddd;text-decoration:none;">
+            <i class="fab fa-instagram"></i> Instagram
+          </a>
+        </div>
+        <div class="highlight-grid">
+          <div class="highlight-item" onclick="navigateTo('teacher')"><div>👨‍🏫</div><div style="font-weight:700;">10+ Years</div><div style="font-size:11px;">Experience</div></div>
+          <div class="highlight-item" onclick="navigateTo('facilities')"><div>🖥️</div><div style="font-weight:700;">Smart Board</div><div style="font-size:11px;">Digital Classes</div></div>
+          <div class="highlight-item" onclick="navigateTo('fees')"><div>💰</div><div style="font-weight:700;">₹1000/mo</div><div style="font-size:11px;">Affordable Fees</div></div>
+          <div class="highlight-item" onclick="navigateTo('teacher')"><div>🎯</div><div style="font-weight:700;">Expert</div><div style="font-size:11px;">Guidance</div></div>
+        </div>
+      </div>
+
+      <!-- Courses Screen -->
+      <div class="screen" id="screen-courses">
+        <h3 style="margin-bottom:10px;">📚 Classes 1st – 8th</h3>
+        <div class="subject-card"><div class="subject-icon" style="background:#e0f2fe;color:#0284c7;">📖</div><div><strong>All Subjects</strong></div><span class="tag tag-blue">1st–8th</span></div>
+        <div class="subject-card"><div class="subject-icon" style="background:#ede9fe;color:#7c3aed;">🇫🇷</div><div><strong>French</strong></div><span class="tag-extra">Extra Fee</span></div>
+        <div class="subject-card"><div class="subject-icon" style="background:#fef3c7;color:#d97706;">📝</div><div><strong>English</strong></div><span class="tag-extra">Extra Fee</span></div>
+        <h3 style="margin:16px 0 10px;">🎯 Classes 9th – 10th</h3>
+        <div class="subject-card"><div class="subject-icon" style="background:#dbeafe;color:#2563eb;">🔬</div><div><strong>Science</strong></div><span class="tag tag-blue">9th–10th</span></div>
+        <div class="subject-card"><div class="subject-icon" style="background:#fee2e2;color:#dc2626;">📐</div><div><strong>Mathematics</strong></div><span class="tag tag-blue">9th–10th</span></div>
+        <div class="subject-card"><div class="subject-icon" style="background:#d1fae5;color:#059669;">🌍</div><div><strong>SST</strong></div><span class="tag tag-blue">9th–10th</span></div>
+        <div class="subject-card"><div class="subject-icon" style="background:#fef3c7;color:#d97706;">📝</div><div><strong>English</strong></div><span class="tag-extra">Extra Fee</span></div>
+        <div class="subject-card"><div class="subject-icon" style="background:#ede9fe;color:#7c3aed;">🇫🇷</div><div><strong>French</strong></div><span class="tag-extra">Extra Fee</span></div>
+      </div>
+
+      <!-- Teacher Screen -->
+      <div class="screen" id="screen-teacher">
+        <div class="card teacher-card">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <h3>Gulshan Phathak</h3>
+          <p style="color:var(--gold);">🌟 Senior Educator | 10+ Years</p>
+          <p style="font-size:13px;color:var(--text-secondary);">5000+ students transformed with smart board & personalized teaching.</p>
+          <div style="margin-top:12px;"><span class="tag tag-gold">🏆 5000+ Students</span> <span class="tag tag-blue">🖥️ Smart Board</span></div>
+        </div>
+      </div>
+
+      <!-- Facilities Screen -->
+      <div class="screen" id="screen-facilities">
+        <h3>🏫 Premium Facilities</h3>
+        <div class="facility-grid">
+          <div class="facility-item"><div>🖥️</div><div>Smart Board</div></div>
+          <div class="facility-item"><div>📝</div><div>Weekly Tests</div></div>
+          <div class="facility-item"><div>❓</div><div>Doubt Sessions</div></div>
+          <div class="facility-item"><div>📱</div><div>Digital Notes</div></div>
+          <div class="facility-item"><div>👥</div><div>Small Batches</div></div>
+          <div class="facility-item"><div>😊</div><div>Friendly Environment</div></div>
+          <div class="facility-item"><div>📄</div><div>Study PDFs</div></div>
+          <div class="facility-item"><div>🏫</div><div>Offline Classroom</div></div>
+        </div>
+      </div>
+
+      <!-- Fees Screen -->
+      <div class="screen" id="screen-fees">
+        <div class="fee-highlight">
+          <div>Monthly Fees</div>
+          <div style="font-size:42px;font-weight:800;">₹1000</div>
+          <div>per month</div>
+        </div>
+        <div class="card">
+          <h4>📋 Admission Form</h4>
+          <div style="margin:10px 0;"><input placeholder="Student Name" id="studentName" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--input-border);"></div>
+          <div style="margin:10px 0;"><select id="studentClass" style="width:100%;padding:12px;border-radius:10px;"><option>1st</option><option>2nd</option><option>3rd</option><option>4th</option><option>5th</option><option>6th</option><option>7th</option><option>8th</option><option>9th</option><option>10th</option></select></div>
+          <div style="margin:10px 0;"><select id="studentSubject" style="width:100%;padding:12px;"><option>All (1-8)</option><option>Science</option><option>Maths</option><option>SST</option><option>English (Extra)</option><option>French (Extra)</option></select></div>
+          <div style="margin:10px 0;"><input placeholder="Parent Contact" id="parentContact" style="width:100%;padding:12px;"></div>
+          <button class="btn btn-primary" onclick="submitAdmission()">Submit Inquiry</button>
+          <button class="btn btn-gold" style="margin-left:8px;" onclick="showToast('📞 Call +91-98765-43210')">Call Now</button>
+        </div>
+      </div>
+
+      <!-- Dashboard (Student list, materials with open/download) -->
+      <div class="screen" id="screen-dashboard">
+        <div class="card">
+          <h4>📋 Student Details <span style="font-size:11px;color:var(--gold);">(manage students)</span></h4>
+          <div class="student-list" id="studentList">
+            <div class="student-item" data-id="1">
+              <div class="student-info">
+                <div><strong>Shyam</strong></div>
+                <div>Teacher: Gulshan Phathak</div>
+                <div>Subject: Science, Maths</div>
+                <div>Fees: ₹1000/mo | 📞 9876543210</div>
+              </div>
+              <div class="student-actions">
+                <i class="fas fa-edit" style="cursor:pointer; color:var(--primary);" onclick="editStudent(this)"></i>
+                <i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" onclick="deleteStudent(this)"></i>
+              </div>
+            </div>
+            <div class="student-item" data-id="2">
+              <div class="student-info">
+                <div><strong>Riya</strong></div>
+                <div>Teacher: Gulshan Phathak</div>
+                <div>Subject: English, SST</div>
+                <div>Fees: ₹1000/mo | 📞 9988776655</div>
+              </div>
+              <div class="student-actions">
+                <i class="fas fa-edit" style="cursor:pointer; color:var(--primary);" onclick="editStudent(this)"></i>
+                <i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" onclick="deleteStudent(this)"></i>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="addStudent()"><i class="fas fa-plus"></i> Add Student</button>
+        </div>
+
+        <div class="card">
+          <h4>📚 Study Materials</h4>
+          <ul class="file-list" id="materialList">
+            <li data-dummy="true" onclick="openMaterial(this)">
+              <span>📄 Science_Notes_Ch1.pdf</span>
+              <i class="fas fa-trash-alt" style="cursor:pointer;" onclick="event.stopPropagation(); removeMaterial(this)"></i>
+            </li>
+            <li data-dummy="true" onclick="openMaterial(this)">
+              <span>📘 Maths_Formula_Sheet.pdf</span>
+              <i class="fas fa-trash-alt" style="cursor:pointer;" onclick="event.stopPropagation(); removeMaterial(this)"></i>
+            </li>
+          </ul>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('fileUpload').click()"><i class="fas fa-plus"></i> Add PDF/Notes</button>
+          <input type="file" id="fileUpload" style="display:none;" accept=".pdf,.doc,.docx,.txt,.jpg,.png" onchange="handleFileUpload(this)">
+        </div>
+        <div class="card"><h4>🔔 Notifications</h4><p style="font-size:12px;">📌 Test on Sunday | 📌 New notes uploaded</p></div>
+      </div>
+
+      <!-- Media Screen (YouTube changeable) -->
+      <div class="screen" id="screen-media">
+        <h3>▶️ Class Video</h3>
+        <div class="media-thumb">
+          <iframe id="youtubeIframe" width="100%" height="100%" src="https://www.youtube.com/embed/WmxF_tVHYMI" title="Class session" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <a id="fullVideoLink" href="https://youtu.be/WmxF_tVHYMI?si=n4fbqzsgJ-aj3wuh" target="_blank" class="btn btn-primary" style="flex:1;">
+            <i class="fas fa-external-link-alt"></i> Watch Full Video
+          </a>
+          <button class="btn btn-outline btn-sm" onclick="changeVideoLink()"><i class="fas fa-edit"></i> Change Video</button>
+        </div>
+        <a href="https://youtube.com/@learnwithgulshan1435?si=bc2oBlCSPXliC-ho" target="_blank" class="btn btn-outline" style="width:100%;margin-bottom:14px;">
+          <i class="fab fa-youtube"></i> Subscribe to Channel
+        </a>
+
+        <h3>📸 Instagram</h3>
+        <div class="insta-grid">
+          <div class="insta-item" onclick="window.open('https://www.instagram.com/learnwithgulshan?igsh=MTV4a2ZwbHdhOG90bA==', '_blank')">📚</div>
+          <div class="insta-item" onclick="window.open('https://www.instagram.com/learnwithgulshan?igsh=MTV4a2ZwbHdhOG90bA==', '_blank')">🏆</div>
+          <div class="insta-item" onclick="window.open('https://www.instagram.com/learnwithgulshan?igsh=MTV4a2ZwbHdhOG90bA==', '_blank')">🎓</div>
+        </div>
+        <a href="https://www.instagram.com/learnwithgulshan?igsh=MTV4a2ZwbHdhOG90bA==" target="_blank" class="btn btn-gold" style="width:100%;">
+          <i class="fab fa-instagram"></i> Follow on Instagram
+        </a>
+      </div>
+
+      <!-- Contact Screen with Map -->
+      <div class="screen" id="screen-contact">
+        <h3>📞 Get In Touch</h3>
+        <div class="contact-method">
+          <div><i class="fas fa-phone"></i></div>
+          <div style="flex:1;">
+            <strong>Call</strong>
+            <p id="contactNumberDisplay" class="editable-text" onclick="editContactNumber()">+91 98765 43210</p>
+            <input id="contactNumberInput" class="inline-edit-input" style="display:none;" value="+91 98765 43210" onblur="saveContactNumber()" onkeydown="if(event.key==='Enter')saveContactNumber()">
+          </div>
+          <i class="fas fa-pen" style="cursor:pointer; color:var(--gold);" onclick="editContactNumber()" title="Edit number"></i>
+        </div>
+
+        <div class="contact-method">
+          <div><i class="fas fa-map-marker-alt"></i></div>
+          <div style="flex:1;">
+            <strong>Location</strong>
+            <p id="locationDisplay" class="editable-text" onclick="editLocation()">City Center, Main Road</p>
+            <input id="locationInput" class="inline-edit-input" style="display:none;" value="City Center, Main Road" onblur="saveLocation()" onkeydown="if(event.key==='Enter')saveLocation()">
+          </div>
+          <i class="fas fa-pen" style="cursor:pointer; color:var(--gold);" onclick="editLocation()" title="Edit location"></i>
+        </div>
+
+        <!-- Map Section -->
+        <div class="card" style="padding:8px;">
+          <div class="map-container">
+            <iframe id="locationMap" src="https://maps.google.com/maps?q=City+Center+Main+Road&t=&z=13&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+            <a id="openInMaps" href="https://www.google.com/maps/search/City+Center+Main+Road" target="_blank" class="btn btn-sm btn-outline">
+              <i class="fas fa-external-link-alt"></i> Open in Google Maps
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-method" onclick="showToast('💬 Opening WhatsApp...')"><div><i class="fab fa-whatsapp"></i></div><div><strong>WhatsApp</strong><p>Quick support</p></div></div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item active" data-screen="home" onclick="navigateTo('home')"><i class="fas fa-home"></i> Home</button>
+      <button class="nav-item" data-screen="courses" onclick="navigateTo('courses')"><i class="fas fa-book-open"></i> Courses</button>
+      <button class="nav-item" data-screen="dashboard" onclick="navigateTo('dashboard')"><i class="fas fa-user-graduate"></i> Dashboard</button>
+      <button class="nav-item" data-screen="media" onclick="navigateTo('media')"><i class="fas fa-play-circle"></i> Media</button>
+      <button class="nav-item" data-screen="contact" onclick="navigateTo('contact')"><i class="fas fa-phone-alt"></i> Contact</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      let current = 'home', previous = 'home';
+      const subScreens = ['teacher', 'facilities', 'fees'];
+
+      setTimeout(() => document.getElementById('splashOverlay').classList.add('hidden'), 2500);
+      if (localStorage.getItem('wcDarkMode') === 'true') enableDarkMode();
+
+      window.navigateTo = function(screen) {
+        if (current === screen) return;
+        previous = current;
+        current = screen;
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById('screen-' + screen);
+        if (target) target.classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const nav = document.querySelector(`.nav-item[data-screen="${screen}"]`);
+        if (nav) nav.classList.add('active');
+        document.getElementById('backBtn').classList.toggle('visible', subScreens.includes(screen));
+        document.getElementById('screenContent').scrollTop = 0;
+      };
+
+      window.goBack = function() { if (subScreens.includes(current)) navigateTo(previous); };
+
+      window.toggleDarkMode = function() {
+        document.body.classList.contains('dark-mode') ? disableDarkMode() : enableDarkMode();
+      };
+
+      function enableDarkMode() {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkToggle').innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem('wcDarkMode', 'true');
+      }
+      function disableDarkMode() {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('darkToggle').innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem('wcDarkMode', 'false');
+      }
+
+      window.showToast = function(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200);
+      };
+
+      window.submitAdmission = function() {
+        const name = document.getElementById('studentName').value.trim();
+        const cls = document.getElementById('studentClass').value;
+        const sub = document.getElementById('studentSubject').value;
+        const contact = document.getElementById('parentContact').value.trim();
+        if (!name || !cls || !sub || !contact) return showToast('⚠️ Please fill all fields');
+        if (!/^\d{10}$/.test(contact)) return showToast('⚠️ Enter valid 10-digit number');
+        showToast('✅ Inquiry submitted!');
+        document.getElementById('studentName').value = '';
+        document.getElementById('parentContact').value = '';
+      };
+
+      // Student management
+      window.addStudent = function() {
+        const name = prompt('Enter student name:');
+        if (!name) return;
+        const teacher = prompt('Teacher name:', 'Gulshan Phathak');
+        const subject = prompt('Subject(s):', 'All Subjects');
+        const fees = prompt('Fees:', '₹1000/mo');
+        const phone = prompt('Phone number:');
+        if (!teacher || !subject || !fees || !phone) return;
+
+        const list = document.getElementById('studentList');
+        const div = document.createElement('div');
+        div.className = 'student-item';
+        div.dataset.id = Date.now();
+        div.innerHTML = `
+          <div class="student-info">
+            <div><strong>${name}</strong></div>
+            <div>Teacher: ${teacher}</div>
+            <div>Subject: ${subject}</div>
+            <div>Fees: ${fees} | 📞 ${phone}</div>
+          </div>
+          <div class="student-actions">
+            <i class="fas fa-edit" style="cursor:pointer; color:var(--primary);" onclick="editStudent(this)"></i>
+            <i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" onclick="deleteStudent(this)"></i>
+          </div>`;
+        list.appendChild(div);
+        showToast('✅ Student added');
+      };
+
+      window.editStudent = function(icon) {
+        const item = icon.closest('.student-item');
+        const info = item.querySelector('.student-info');
+        const currentName = info.querySelector('strong').innerText;
+        const currentTeacher = info.children[1].innerText.replace('Teacher: ', '');
+        const currentSubject = info.children[2].innerText.replace('Subject: ', '');
+        const feesPhone = info.children[3].innerText.split(' | ');
+        const currentFees = feesPhone[0].replace('Fees: ', '');
+        const currentPhone = feesPhone[1] ? feesPhone[1].replace('📞 ', '') : '';
+
+        const newName = prompt('Name:', currentName);
+        const newTeacher = prompt('Teacher:', currentTeacher);
+        const newSubject = prompt('Subject:', currentSubject);
+        const newFees = prompt('Fees:', currentFees);
+        const newPhone = prompt('Phone:', currentPhone);
+        if (newName && newTeacher && newSubject && newFees && newPhone) {
+          info.innerHTML = `
+            <div><strong>${newName}</strong></div>
+            <div>Teacher: ${newTeacher}</div>
+            <div>Subject: ${newSubject}</div>
+            <div>Fees: ${newFees} | 📞 ${newPhone}</div>`;
+          showToast('✅ Student updated');
+        }
+      };
+
+      window.deleteStudent = function(icon) {
+        const item = icon.closest('.student-item');
+        item.style.opacity = '0';
+        setTimeout(() => item.remove(), 200);
+        showToast('🗑️ Student removed');
+      };
+
+      // Contact editing
+      window.editContactNumber = function() {
+        document.getElementById('contactNumberDisplay').style.display = 'none';
+        document.getElementById('contactNumberInput').style.display = 'block';
+        document.getElementById('contactNumberInput').focus();
+      };
+      window.saveContactNumber = function() {
+        const input = document.getElementById('contactNumberInput');
+        document.getElementById('contactNumberDisplay').innerText = input.value;
+        document.getElementById('contactNumberDisplay').style.display = '';
+        input.style.display = 'none';
+        showToast('📞 Number updated');
+      };
+
+      // Location editing and map update
+      window.editLocation = function() {
+        document.getElementById('locationDisplay').style.display = 'none';
+        document.getElementById('locationInput').style.display = 'block';
+        document.getElementById('locationInput').focus();
+      };
+      window.saveLocation = function() {
+        const input = document.getElementById('locationInput');
+        const newLocation = input.value;
+        document.getElementById('locationDisplay').innerText = newLocation;
+        document.getElementById('locationDisplay').style.display = '';
+        input.style.display = 'none';
+
+        // Update map iframe
+        const encodedLocation = encodeURIComponent(newLocation);
+        const mapIframe = document.getElementById('locationMap');
+        mapIframe.src = `https://maps.google.com/maps?q=${encodedLocation}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+
+        // Update open in maps link
+        const mapsLink = document.getElementById('openInMaps');
+        mapsLink.href = `https://www.google.com/maps/search/${encodedLocation}`;
+
+        showToast('📍 Location and map updated');
+      };
+
+      // YouTube video change
+      window.changeVideoLink = function() {
+        const newUrl = prompt('Enter new YouTube video URL:', 'https://youtu.be/WmxF_tVHYMI');
+        if (newUrl) {
+          let videoId = newUrl.trim();
+          const patterns = [
+            /(?:youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/)([^&\s]+)/,
+            /^([a-zA-Z0-9_-]{11})$/
+          ];
+          for (let pattern of patterns) {
+            const match = videoId.match(pattern);
+            if (match) { videoId = match[1]; break; }
+          }
+          document.getElementById('youtubeIframe').src = `https://www.youtube.com/embed/${videoId}`;
+          document.getElementById('fullVideoLink').href = `https://youtu.be/${videoId}`;
+          showToast('✅ Video updated!');
+        }
+      };
+
+      function generateDummyPDF(filename) {
+        const content = `%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n4 0 obj\n<< /Length 44 >>\nstream\nBT /F1 24 Tf 100 700 Td (Sample PDF) Tj ET\nendstream\nendobj\n5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\nxref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000210 00000 n \n0000000306 00000 n \ntrailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n383\n%%EOF`;
+        return new Blob([content], { type: 'application/pdf' });
+      }
+
+      window.openMaterial = function(item) {
+        if (item.dataset.fileUrl) {
+          window.open(item.dataset.fileUrl, '_blank');
+        } else if (item.dataset.dummy === 'true') {
+          const filename = item.querySelector('span').innerText.trim();
+          const blob = generateDummyPDF(filename);
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } else {
+          showToast('No file available');
+        }
+      };
+
+      window.handleFileUpload = function(input) {
+        if (input.files.length > 0) {
+          const file = input.files[0];
+          const list = document.getElementById('materialList');
+          const li = document.createElement('li');
+          li.dataset.fileUrl = URL.createObjectURL(file);
+          li.onclick = function() { openMaterial(li); };
+          li.innerHTML = `<span>📎 ${file.name}</span> <i class="fas fa-trash-alt" style="cursor:pointer;" onclick="event.stopPropagation(); removeMaterial(this)"></i>`;
+          list.appendChild(li);
+          showToast('✅ File added: ' + file.name);
+        }
+      };
+
+      window.removeMaterial = function(icon) {
+        const li = icon.parentElement;
+        if (li.dataset.fileUrl) {
+          URL.revokeObjectURL(li.dataset.fileUrl);
+        }
+        li.style.opacity = '0';
+        setTimeout(() => li.remove(), 200);
+        showToast('🗑️ Material removed');
+      };
+    })();
+  </script>
+</body>
+</html>
